@@ -1,0 +1,166 @@
+#nrow is specified to read only 10 rows
+#dataset =pd.read_csv('data.csv',nrows = 10)
+read csv does return a dataframe
+
+print(df.head()) -> prints first 5 rows
+num_rows = df.shape[0] -> returns number of rows
+num_cols = df.shape[1] -> returns number of columns
+
+
+
+# first array is x axis, second array is y axis
+#ax.plot([1, 2, 3, 4], [1, 4, 2, 3])
+
+
+#this line remvoes a column from the dataframe,and creates a new dataframe for it
+dfilter= df.loc[:, df.columns != 'machineID']
+
+loc() accesses a group of rows and columns by label(s) or a boolean array
+
+
+
+print(df.info()) -> prints the info of the dataframe
+print(dfilter.head()) -> prints the first 5 rows of the new dataframe
+
+
+
+ax1 = plt.subplot(242)
+-> the hundreds place number specifies the number of plots to create
+-> the ones place number specifies which plot to select, if the hundreds place # is > 1
+-> the tens place number specifies the number of columns in the plot, which basically means how vertically streched it is
+-> the width is defaulted,can modify that with this instruction
+
+'o--' -> This is for matplotlib specifies the line style, o is the marker, -- is the line style, this is preferred becaue it shows
+both the marker and the line
+
+ax1 =plt.subplot(311)
+ax1.plot(dfilter[option], df['volt'], 'o--')
+ax1.set_title('Voltage')
+ax2 =plt.subplot(312)
+ax2.plot(dfilter[option], df['rotate'],'o--')
+ax2.set_title('Rotation')
+ax3 =plt.subplot(313)
+ax3.plot(dfilter[option], df['pressure'],'o--')
+ax3.set_title('Pressure')
+
+
+
+
+
+DEVELOPMENT NOTES: 
+NEED to make a function that limits the number of rows that are read
+if rows > 500 ( the exact number is subject to change)
+else, read all rows
+
+
+
+#The r- signifies that the line is red, and the o signifies that the data line is solid
+plt.plot(filtered_time, filtered_position, 'r-', label='Kalman Filter Estimate')
+
+In the matplotlib.pyplot.plot function, the string 'b.' specifies the color 
+and marker style of the plot. Specifically, 'b' stands for blue, and '.' indicates a point marker. 
+Therefore, 'b.' means plotting with blue point markers.
+
+alpha controls the transparency of the plot.
+plt.plot(time_data, rotate_data, 'b.', label='Original Data', alpha=0.5)
+
+
+                                                                             
+TEST FUNCTIONS COMMANDS:
+#print(timeOption('seconds',dfcopy,'2015-01-01 5:55:0').head())
+
+        
+
+
+def timeOption(type,dataset,startTime=None):
+   
+    if startTime is None:
+        startTime = dataset.iloc[0, 0]
+        print(startTime)
+    else:    
+        date_format ='%Y-%m-%d %H:%M:%S'
+        date_obj =datetime.datetime.strptime(startTime,date_format)
+        for i in range(num_rows):
+            if type == 'seconds':
+                dataset.iloc[i,0]= float((dataset.iloc[i,0]-date_obj).total_seconds())
+            elif type == 'minutes':
+                dataset.iloc[i,0]= float((dataset.iloc[i,0]-date_obj).total_seconds()/60)
+            elif type == 'hours':
+                dataset.iloc[i,0]= float((dataset.iloc[i,0]-date_obj).total_seconds()/3600)
+            elif type == 'days':
+                dataset.iloc[i,0]= float((dataset.iloc[i,0]-date_obj).total_seconds()/86400)
+            else:
+                print('Invalid time option')
+    return dataset
+
+
+
+    ax1 = plt.subplot(211)
+ax1.plot(dfilter['seconds_converted'],dfilter['rotate'],'o--',label='rotate')
+ax1.set_ylabel('rotate')
+ax1.set_xlabel('seconds')
+ax2=plt.subplot(212)
+ax2.plot(dfilter.iloc[0:36,5],g2,'o--',label='rotate gradient')
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''filt = np.ones(15)/15
+rotate_smooth= np.convolve(dfilter['rotate'],filt,mode='valid')
+#print(rotate_smooth.shape)
+print(dfilter.iloc[0:486,5].head())
+g2 = np.gradient(rotate_smooth,dfilter.iloc[0:486,5])
+#plt.plot(dfilter.iloc[0:36,5],g2,'o--',label='rotate smooth')
+
+ax1 = plt.subplot(211)
+ax1.plot(dfilter['hours_converted'],dfilter['rotate'],'o--',label='rotate')
+ax1.set_ylabel('rotate')
+ax1.set_xlabel('seconds')
+#ax1.set_ylim([350,500])
+ax1.set_xlim([indexStart,indexEnd])
+ax2=plt.subplot(212)
+ax2.plot(dfilter.iloc[0:486,5],g2,'o--',label='rotate gradient')
+
+#plt.plot(dfilter['seconds_converted'],dfilter['rotate'],'o--',label='rotate')
+#g1= np.gradient(dfilter['rotate'],dfilter['seconds_converted'])
+#plt.plot(dfilter['seconds_converted'],dfilter['rotate'],'o--',label='rotate')
+#plt.plot(dfilter['seconds_converted'],g1,'o--',label='rotate gradient')
+
+#dydx = np.gradient(y,x)
+
+#plt.plot(x,y, label ='$y(x)$') 
+#plt.plot(x,dydx, label ='$y\'(x)$')
+#print(dfilter.info())
+
+#print(dfilter.head())
+#print(num_rows)
+
+
+
+
+
+
+#print(dfilter.head())
+
+#dydx= np.gradient(dfilter, axis=0)
+#dydx= pd.DataFrame(dydx, columns=['volt','rotate','pressure'])
+#dydx.plot(x='datetime', y=['volt','rotate','pressure'], kind='line')
+
+#dfilter =pd.DataFrame(dfilter, columns=['volt','rotate','pressure'])
+#filter.plot(x='datetime', y=['volt','rotate','pressure'], kind='line')
+ 
+
+
+
+
+plt.show()
+'''
